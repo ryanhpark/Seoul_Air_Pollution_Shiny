@@ -69,34 +69,38 @@ dashboardPage(
                 2,
                 radioButtons(
                   inputId = "finedust",
-                  label = h4("select Pollutant"),
+                  label = h4("Select Pollutant"),
                   choices = c("PM10", "PM2.5"),
                   inline = TRUE
                 ),
-                selectInput(
+                br(),
+                checkboxGroupInput(
                   inputId = "years",
                   label = h4("Select Year"),
                   choices = c(2017:2019),
-                  selected = 2017
+                  selected = 2017,
+                  inline = TRUE
                 ),
-                selectInput(
+                sliderInput(
                   inputId = "months",
-                  label = h4("Select Month"),
-                  choices = c(1:12),
-                  selected = 1
+                  label = h4("Select Month Range"),
+                  min = 1,
+                  max = 12,
+                  value = c(1,1)
                 ),
-                selectInput(
+                sliderInput(
                   inputId = "dates",
-                  label = h4("Select Date"),
-                  choices = c(1:31),
-                  selected = 1
+                  label = h4("Select Date Range"),
+                  min = 1,
+                  max = 31,
+                  value = c(1,1)
                 ),
                 sliderInput(
                   inputId = "times",
                   label = h4("Select Hour Range"),
                   min = 0,
                   max = 23,
-                  value = c(0, 1)
+                  value = c(0, 0)
                 )
               )
             ),
@@ -116,8 +120,9 @@ dashboardPage(
                 infoBoxOutput("bad_min", width = 2),
                 infoBoxOutput("bad_avg", width = 2),
                 infoBoxOutput("bad_max", width = 2)
-              )
-            )),
+              ),
+            ),
+            h5(strong("*The minimum, average, maximum values are calculated with the timeline specified"))),
     tabItem(tabName = "trend",
             fluidRow(
               box(

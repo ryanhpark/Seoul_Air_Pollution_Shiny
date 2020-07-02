@@ -45,9 +45,9 @@ shinyServer(function(input, output, session){
       addAwesomeMarkers(lat = air_map()$lat, 
                  lng = air_map()$long,
                  popup = ~paste('<b>',Station.name.district,'</b><br/>',
-                                "Min:", round(air_map()[[4]],2), '<br/>',
-                                "Avg:", round(air_map()[[5]],2), '<br/>',
-                                "Max:", round(air_map()[[6]],2)),
+                                "Min:", round(air_map()[[4]]), '<br/>',
+                                "Avg:", round(air_map()[[5]]), '<br/>',
+                                "Max:", round(air_map()[[6]])),
                  icon = icons) %>% 
       addLegend(
         colors = c("#0099FF", "#4CBB17", "#F9A602", "#CC0000"),
@@ -67,7 +67,7 @@ shinyServer(function(input, output, session){
     col = ifelse(input$finedust == "PM10", getColor1(best[[2]]), getColor2(best[[2]]))
     
     infoBox(
-      "Fresh Air Neighborhood", best[[1]], icon = icon("thumbs-up", lib = "glyphicon"),
+      "Cleanest Air (Average)", best[[1]], icon = icon("thumbs-up", lib = "glyphicon"),
       color = col)
   })
   # infoBox of neighborhood with bad air
@@ -78,7 +78,7 @@ shinyServer(function(input, output, session){
     col = ifelse(input$finedust == "PM10", getColor1(worst[[2]]), getColor2(worst[[2]]))
 
     infoBox(
-      "Bad Air Neighborhood", worst[[1]], icon = icon("thumbs-down", lib = "glyphicon"),
+      "Worst Air (Average)", worst[[1]], icon = icon("thumbs-down", lib = "glyphicon"),
       color = col)
   })
   
@@ -96,7 +96,7 @@ shinyServer(function(input, output, session){
     best = air_map() %>% arrange(air_map()[[5]])
     avg = best %>% summarise(first(best[[5]]))
     col = ifelse(input$finedust == "PM10", getColor1(avg), getColor2(avg))
-    infoBox("Average", avg, 
+    infoBox("Average", round(avg), 
             icon = icon("stats", lib = "glyphicon"), 
             fill =T, color = col)
   })
@@ -123,7 +123,7 @@ shinyServer(function(input, output, session){
     worst = air_map() %>% arrange(desc(air_map()[[5]]))
     avg = worst %>% summarise(first(worst[[5]]))
     col = ifelse(input$finedust == "PM10", getColor1(avg), getColor2(avg))
-    infoBox("Average", avg, 
+    infoBox("Average", round(avg), 
             icon = icon("stats", lib = "glyphicon"), 
             fill =T, color = col)
   })
@@ -172,7 +172,7 @@ shinyServer(function(input, output, session){
     trend_plot = trend_yr_mon() %>% 
       ggplot(aes(x = as.Date(dates), y = avg, color = type)) +
       labs(x = "Timeline", y = "Daily Average")+
-      geom_line() + stat_smooth(se = F) + theme_bw() +
+      geom_line() + geom_smooth(se = F) + theme_bw() +
       scale_color_brewer(name = "", palette="Set1")
     ggplotly(trend_plot)
   })
@@ -301,7 +301,7 @@ shinyServer(function(input, output, session){
   })
   # density plot of the pollutant selected by year
   output$pollutant_density <- renderPlotly({
-      density_plot = ggplot(data = sum_df, aes(x = sum_df[[input$pollute_bar]]))+
+      density_plot = ggplot(data = sum_df, aes(x = .data[[input$pollute_bar]]))+
         geom_density(aes(fill = as.factor(year)), alpha=0.3)+
         scale_fill_discrete(name = "") +
         theme_bw() + labs(x = "Pollutant Level", y = "Density")
