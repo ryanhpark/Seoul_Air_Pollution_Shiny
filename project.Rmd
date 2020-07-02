@@ -1,0 +1,51 @@
+---
+title: "project"
+author: "Ryan"
+date: "6/17/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+ 
+```
+
+# Read Data
+```{r}
+library(tidyverse)
+station_info = read.csv("measurement_station_info.csv")
+station_info = station_info %>% select(Station.code,Station.name.district.)
+item_info = read.csv("measurement_item_info.csv")
+summary = read.csv("measurement_summary.csv")
+summary = summary %>% 
+  left_join(station_info, by = "Station.code")
+names(summary)[names(summary) == "Station.name.district."] = "Station.name.district"
+```
+
+# Data Cleaning
+```{r}
+# Separating the date and time
+summary = summary %>% separate(Measurement.date, into = c("dates", "oclock"), sep = " ")
+summary$dates = as.Date(summary$dates, format = "%Y-%m-%d")
+summary = summary %>% mutate(year = format(dates, "%Y"), 
+                             month = format(dates, "%m"), 
+                             date = format(dates, "%d"))
+summary$time = as.numeric(str_extract(summary$oclock, "\\d{2}"))
+
+# Filtering values that do not make sense.
+sum_df = summary %>% 
+  filter(SO2 > 0 & SO2 <= 1, 
+         NO2 > 0 & NO2 <= 2, 
+         CO > 0 & CO <= 50, 
+         O3 > 0 & O3 <= 0.5, 
+         PM10 > 0 & PM10 <= 600, 
+         PM2.5 > 0 & PM2.5 <= 500)
+
+#write.csv(sum_df, file = "sum_df.csv",row.names = F)
+```
+
+
+
+
+
