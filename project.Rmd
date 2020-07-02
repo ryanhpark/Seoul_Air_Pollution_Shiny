@@ -45,6 +45,23 @@ sum_df = summary %>%
 ```
 
 
+```{r}
+sum_df %>% 
+      filter(year == c(2016:2019),
+             month == c(1:12),
+             date == c(1:31),
+             time == c(0:23)
+             ) %>% 
+      group_by(Station.name.district) %>% 
+      summarise(lat = first(Latitude), 
+                long = first(Longitude),
+                min_pm10 = min(PM10, na.rm = T),
+                avg_pm10 = mean(PM10, na.rm = T),
+                max_pm10 = max(PM10, na.rm = T),
+                min_pm2.5 = min(PM2.5, na.rm = T),
+                avg_pm2.5 = mean(PM2.5, na.rm = T),
+                max_pm2.5 = max(PM2.5, na.rm = T))
+```
 
 
 

@@ -81,19 +81,17 @@ dashboardPage(
                   selected = 2017,
                   inline = TRUE
                 ),
-                sliderInput(
+                checkboxGroupInput(
                   inputId = "months",
                   label = h4("Select Month Range"),
-                  min = 1,
-                  max = 12,
-                  value = c(1,1)
+                  choices = c(1:12),
+                  selected = 1
                 ),
-                sliderInput(
+                checkboxGroupInput(
                   inputId = "dates",
                   label = h4("Select Date Range"),
-                  min = 1,
-                  max = 31,
-                  value = c(1,1)
+                  choices = c(1:31),
+                  selected = 1
                 ),
                 sliderInput(
                   inputId = "times",
