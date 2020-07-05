@@ -9,29 +9,21 @@ shinyServer(function(input, output, session){
       group_by(Station.name.district) %>% 
       summarise(lat = first(Latitude), 
                 long = first(Longitude),
-                min_pm10 = min(PM10),
-                avg_pm10 = mean(PM10),
-                max_pm10 = max(PM10),
-                min_pm2.5 = min(PM2.5),
-                avg_pm2.5 = mean(PM2.5),
-                max_pm2.5 = max(PM2.5)) %>% 
+                min_PM10 = min(PM10),
+                avg_PM10 = mean(PM10),
+                max_PM10 = max(PM10),
+                min_PM2.5 = min(PM2.5),
+                avg_PM2.5 = mean(PM2.5),
+                max_PM2.5 = max(PM2.5)) %>% 
       select(Station.name.district, lat, long, contains(input$finedust))
-  })
-  # Updating the date choices for month option
-  observe({
-    dates <- unique(sum_df[sum_df$year == input$years & 
-                             sum_df$month == input$months, "date"])
-    updateSelectInput(session, "dates",
-                      choices = dates,
-                      selected = dates[1])
   })
   # leaflet map of Seoul city
   output$map <- renderLeaflet({
     # assigning colors by the group of the pollutant level
     if (input$finedust == "PM10") {
-      getColor <- sapply(air_map()$avg_pm10, getColor1)
+      getColor <- sapply(air_map()$avg_PM10, getColor1)
     } else {
-      getColor <- sapply(air_map()$avg_pm2.5, getColor2)
+      getColor <- sapply(air_map()$avg_PM2.5, getColor2)
     }
     # icon of the map pin
     icons <- awesomeIcons(

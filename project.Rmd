@@ -45,29 +45,3 @@ sum_df = summary %>%
 ```
 
 
-```{r}
-air_map = sum_df %>% 
-      filter(year %in% c(2017:2019), 
-             month %in% c(1:12),
-             date %in% c(1:31),
-             time %in% c(0:23)) %>% 
-      group_by(Station.name.district) %>% 
-      summarise(lat = first(Latitude), 
-                long = first(Longitude),
-                min_pm10 = min(PM10),
-                avg_pm10 = mean(PM10),
-                max_pm10 = max(PM10),
-                min_pm2.5 = min(PM2.5),
-                avg_pm2.5 = mean(PM2.5),
-                max_pm2.5 = max(PM2.5))%>% 
-      select(Station.name.district, lat, long, contains('PM10'))
-
-best_neighborhood = air_map %>% arrange(air_map[[5]])
-
-best = best_neighborhood %>%
-  summarise(first(Station.name.district), first(best_neighborhood[[5]]))
-best
-```
-
-
-
