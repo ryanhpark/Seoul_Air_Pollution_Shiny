@@ -3,9 +3,9 @@ shinyServer(function(input, output, session){
   air_map <- reactive({
     sum_df %>% 
       filter(year %in% input$years, 
-             month %in% input$months,
-             date %in% input$dates,
-             time %in% input$times) %>% 
+             month >= input$months[[1]] & month <= input$months[[2]],
+             date >= input$dates[[1]] & date <= input$dates[[2]],
+             time >= input$times[[1]] & time <= input$times[[2]]) %>% 
       group_by(Station.name.district) %>% 
       summarise(lat = first(Latitude), 
                 long = first(Longitude),
