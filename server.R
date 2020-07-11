@@ -2,7 +2,7 @@ shinyServer(function(input, output, session){
   # reactive used for creating map
   air_map <- reactive({
     sum_df %>% 
-      filter(year %in% input$years, 
+      filter(year >= input$years[[1]] & year <= input$years[[2]], 
              month >= input$months[[1]] & month <= input$months[[2]],
              date >= input$dates[[1]] & date <= input$dates[[2]],
              time >= input$times[[1]] & time <= input$times[[2]]) %>% 

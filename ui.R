@@ -74,12 +74,13 @@ dashboardPage(
                   inline = TRUE
                 ),
                 br(),
-                checkboxGroupInput(
+                sliderInput(
                   inputId = "years",
                   label = h4("Select Year"),
-                  choices = c(2017:2019),
-                  selected = 2017,
-                  inline = TRUE
+                  min = 2017,
+                  max = 2019,
+                  value = c(2017,2017),
+                  sep = ""
                 ),
                 sliderInput(
                   inputId = "months",
@@ -104,6 +105,8 @@ dashboardPage(
                 )
               )
             ),
+            h5(strong("*The minimum, average, maximum values are calculated with the timeline specified")),
+            h5(strong("*The unit of measurement for the values is 'microgram/m3'")),
             fluidRow(
               column(
                 11,
@@ -121,8 +124,8 @@ dashboardPage(
                 infoBoxOutput("bad_avg", width = 2),
                 infoBoxOutput("bad_max", width = 2)
               ),
+            )
             ),
-            h5(strong("*The minimum, average, maximum values are calculated with the timeline specified"))),
     tabItem(tabName = "trend",
             fluidRow(
               box(
